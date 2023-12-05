@@ -1,18 +1,55 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:forsis/components/my_buttton.dart';
 import 'package:forsis/components/my_textfield.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
-  //text editing controllers
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void singUserIn() {}
+  void _showAlertDialog(BuildContext context, String text) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Alert'),
+        content: Text(text),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            /// This parameter indicates this action is the default,
+            /// and turns the action's text to bold text.
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Ok'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    Future singUserIn() async {
+      var url = Uri.http(
+          "187.225.48.254", '/entradasysalidas/login.php', {'q': '{http}'});
+      var response = await http.post(url, body: {
+        "username": usernameController.text,
+        "password": passwordController.text,
+      });
+      var data = json.decode(response.body);
+      if (data.toString() == "Success") {
+        _showAlertDialog(context, data.toString());
+      } else {
+        _showAlertDialog(context, data.toString());
+      }
+    }
+    //text editing controllers
+
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
@@ -66,9 +103,9 @@ class LoginPage extends StatelessWidget {
               ),
               const SizedBox(height: 25),
 
-              MyButton(
-                buttonText: "Iniciar Sesión",
-                onTap: singUserIn,
+              CupertinoButton.filled(
+                onPressed: singUserIn,
+                child: const Text('Iniciar Sesión'),
               ),
             ],
           ),
