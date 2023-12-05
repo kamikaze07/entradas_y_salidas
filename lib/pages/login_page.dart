@@ -15,7 +15,7 @@ class LoginPage extends StatelessWidget {
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
-        title: const Text('Alert'),
+        title: const Text('Inicio de Sesión'),
         content: Text(text),
         actions: <CupertinoDialogAction>[
           CupertinoDialogAction(
