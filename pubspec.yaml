@@ -13,6 +13,9 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.1
+  font_awesome_flutter: ^9.1.0
+  provider: ^5.0.0
+  flutter_svg: ^0.22.0
 
   cupertino_icons: ^1.0.2
 

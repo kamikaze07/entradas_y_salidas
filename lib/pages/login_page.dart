@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:forsis/components/my_textfield.dart';
 import 'package:http/http.dart' as http;
+import 'package:forsis/pages/dashboard.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -12,24 +13,44 @@ class LoginPage extends StatelessWidget {
   final passwordController = TextEditingController();
 
   void _showAlertDialog(BuildContext context, String text) {
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: const Text('Inicio de Sesión'),
-        content: Text(text),
-        actions: <CupertinoDialogAction>[
-          CupertinoDialogAction(
-            /// This parameter indicates this action is the default,
-            /// and turns the action's text to bold text.
-            isDefaultAction: true,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Ok'),
-          ),
-        ],
-      ),
-    );
+    if (text == "Success") {
+      showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: const Text('Inicio de Sesión'),
+          content: Text(text),
+          actions: <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              /// This parameter indicates this action is the default,
+              /// and turns the action's text to bold text.
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LauncherPage()));
+              },
+              child: const Text('Ok'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: const Text('Inicio de Sesión'),
+          content: Text(text),
+          actions: <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              /// This parameter indicates this action is the default,
+              /// and turns the action's text to bold text.
+              isDefaultAction: true,
+              onPressed: () {},
+              child: const Text('Ok'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override
