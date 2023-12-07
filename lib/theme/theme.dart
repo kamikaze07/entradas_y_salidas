@@ -12,16 +12,16 @@ class ThemeChanger with ChangeNotifier {
         _darkTheme = false;
         _customTheme = false;
         _currentTheme = ThemeData.light().copyWith(
-          colorScheme:
-              ColorScheme.fromSwatch().copyWith(secondary: Colors.pink),
+          colorScheme: ColorScheme.fromSwatch()
+              .copyWith(secondary: const Color.fromARGB(255, 255, 0, 85)),
         );
         break;
       case 2:
         _darkTheme = true;
         _customTheme = false;
         _currentTheme = ThemeData.dark().copyWith(
-          colorScheme:
-              ColorScheme.fromSwatch().copyWith(secondary: Colors.pink),
+          colorScheme: ColorScheme.fromSwatch()
+              .copyWith(secondary: const Color.fromARGB(255, 255, 0, 85)),
         );
         break;
       case 3:
@@ -40,8 +40,8 @@ class ThemeChanger with ChangeNotifier {
         _darkTheme = false;
         _customTheme = false;
         _currentTheme = ThemeData.light().copyWith(
-          colorScheme:
-              ColorScheme.fromSwatch().copyWith(secondary: Colors.pink),
+          colorScheme: ColorScheme.fromSwatch()
+              .copyWith(secondary: const Color.fromARGB(255, 255, 0, 85)),
         );
     }
   }
@@ -55,11 +55,13 @@ class ThemeChanger with ChangeNotifier {
     _darkTheme = valor;
     if (valor) {
       _currentTheme = ThemeData.dark().copyWith(
-        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.pink),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: const Color.fromARGB(255, 255, 0, 85)),
       );
     } else {
       _currentTheme = ThemeData.light().copyWith(
-        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.pink),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: const Color.fromARGB(255, 255, 0, 85)),
       );
     }
     notifyListeners();
@@ -78,7 +80,8 @@ class ThemeChanger with ChangeNotifier {
       );
     } else {
       _currentTheme = ThemeData.light().copyWith(
-        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.pink),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: const Color.fromARGB(255, 255, 0, 85)),
       );
     }
     notifyListeners();

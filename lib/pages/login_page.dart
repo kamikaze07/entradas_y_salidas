@@ -25,8 +25,10 @@ class LoginPage extends StatelessWidget {
               /// and turns the action's text to bold text.
               isDefaultAction: true,
               onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => LauncherPage()));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LauncherPage()));
               },
               child: const Text('Ok'),
             ),
