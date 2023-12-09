@@ -59,7 +59,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Future singUserIn() async {
       var url = Uri.http(
-          "187.225.48.254", '/entradasysalidas/login.php', {'q': '{http}'});
+          "192.168.1.209", '/entradasysalidas/login.php', {'q': '{http}'});
       var response = await http.post(url, body: {
         "username": usernameController.text,
         "password": passwordController.text,

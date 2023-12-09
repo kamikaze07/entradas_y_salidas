@@ -13,7 +13,7 @@ class ThemeChanger with ChangeNotifier {
         _customTheme = false;
         _currentTheme = ThemeData.light().copyWith(
           colorScheme: ColorScheme.fromSwatch()
-              .copyWith(secondary: const Color.fromARGB(255, 255, 0, 85)),
+              .copyWith(secondary: Color.fromARGB(255, 255, 0, 0)),
         );
         break;
       case 2:
@@ -21,7 +21,7 @@ class ThemeChanger with ChangeNotifier {
         _customTheme = false;
         _currentTheme = ThemeData.dark().copyWith(
           colorScheme: ColorScheme.fromSwatch()
-              .copyWith(secondary: const Color.fromARGB(255, 255, 0, 85)),
+              .copyWith(secondary: Color.fromARGB(255, 255, 0, 0)),
         );
         break;
       case 3:
@@ -41,7 +41,7 @@ class ThemeChanger with ChangeNotifier {
         _customTheme = false;
         _currentTheme = ThemeData.light().copyWith(
           colorScheme: ColorScheme.fromSwatch()
-              .copyWith(secondary: const Color.fromARGB(255, 255, 0, 85)),
+              .copyWith(secondary: Color.fromARGB(255, 255, 0, 0)),
         );
     }
   }
@@ -56,12 +56,12 @@ class ThemeChanger with ChangeNotifier {
     if (valor) {
       _currentTheme = ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSwatch()
-            .copyWith(secondary: const Color.fromARGB(255, 255, 0, 85)),
+            .copyWith(secondary: Color.fromARGB(255, 255, 0, 0)),
       );
     } else {
       _currentTheme = ThemeData.light().copyWith(
         colorScheme: ColorScheme.fromSwatch()
-            .copyWith(secondary: const Color.fromARGB(255, 255, 0, 85)),
+            .copyWith(secondary: Color.fromARGB(255, 255, 0, 0)),
       );
     }
     notifyListeners();
@@ -81,7 +81,7 @@ class ThemeChanger with ChangeNotifier {
     } else {
       _currentTheme = ThemeData.light().copyWith(
         colorScheme: ColorScheme.fromSwatch()
-            .copyWith(secondary: const Color.fromARGB(255, 255, 0, 85)),
+            .copyWith(secondary: Color.fromARGB(255, 255, 0, 0)),
       );
     }
     notifyListeners();
