@@ -15,8 +15,14 @@ dependencies:
   http: ^0.13.1
   font_awesome_flutter: ^9.1.0
   provider: ^5.0.0
-  flutter_svg: ^0.22.0
   radio_group_v2: ^1.0.2
+  flutter_svg: ^2.0.9
+  flutter_launcher_icons: ^0.13.1
+flutter_launcher_icons:
+  image_path: "assets/icon/logo.png"
+  android: true
+  ios: true
+
 
   cupertino_icons: ^1.0.2
 
