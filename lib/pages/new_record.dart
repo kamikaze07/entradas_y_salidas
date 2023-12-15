@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:forsis/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:radio_group_v2/radio_group_v2.dart';
+import 'package:forsis/components/formTractoInterno.dart';
 
 class NewRecord extends StatelessWidget {
   const NewRecord({super.key});
@@ -16,6 +17,7 @@ class NewRecord extends StatelessWidget {
         backgroundColor: appTheme.colorScheme.secondary,
         title: const Text('Nuevo Registro'),
       ),
+      resizeToAvoidBottomInset: false,
       body: _Body(),
     );
   }
@@ -24,8 +26,8 @@ class NewRecord extends StatelessWidget {
 class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(
+    return Scaffold(
+      /*body: SafeArea(
         child: Center(
           child: Column(
             children: [
@@ -34,11 +36,24 @@ class _Body extends StatelessWidget {
               RadioEntradaSalida(),
               SizedBox(height: 10),
               Text("Tipo de Unidad:"),
-              RadioTipoUnidad(),
               SizedBox(height: 10),
-              UnidadForsis(),
+              DropdownTipoUnidad(),
             ],
           ),
+        ),
+      ),*/
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: ListView(
+          children: const [
+            SizedBox(height: 20),
+            Text("Unidad de Entrada o Salida:"),
+            RadioEntradaSalida(),
+            SizedBox(height: 10),
+            Text("Tipo de Unidad:"),
+            SizedBox(height: 10),
+            DropdownTipoUnidad(),
+          ],
         ),
       ),
     );
@@ -95,87 +110,117 @@ class _RadioEntradaSalidaState extends State<RadioEntradaSalida> {
   }
 }
 
-//Radios Unidades
-enum TipoUnidad { forsis, externa }
+//Select TipoUnidad
+const List<String> tipoUnidad = <String>[
+  'Selecciona el Tipo de Unidad',
+  'Forsis',
+  'Externa'
+];
 
-class RadioTipoUnidad extends StatefulWidget {
-  const RadioTipoUnidad({super.key});
+const List<String> tipoUnidadInterna = <String>[
+  'Selecciona el Tipo de Unidad',
+  'Tracto',
+  'Utilitario'
+];
+
+class DropdownTipoUnidad extends StatefulWidget {
+  const DropdownTipoUnidad({super.key});
 
   @override
-  State<RadioTipoUnidad> createState() => _RadioTipoUnidadState();
+  State<DropdownTipoUnidad> createState() => _DropdownTipoUnidadState();
 }
 
-class _RadioTipoUnidadState extends State<RadioTipoUnidad> {
-  TipoUnidad? _tipoUnidad = TipoUnidad.forsis;
+class _DropdownTipoUnidadState extends State<DropdownTipoUnidad> {
+  String dropdownValue = tipoUnidad.first;
+  String dropdownTipoUnidadInterna = tipoUnidadInterna.first;
+  bool forsisVisible = false;
+  bool externaVisible = false;
+  bool tractoInternoVisible = false;
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: ListTile(
-            title: const Text('Forsis'),
-            leading: Radio<TipoUnidad>(
-              value: TipoUnidad.forsis,
-              groupValue: _tipoUnidad,
-              onChanged: (TipoUnidad? value) {
-                setState(() {
-                  _tipoUnidad = value;
-                });
-                setState(() {});
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: ListTile(
-            title: const Text('Externa'),
-            leading: Radio<TipoUnidad>(
-              value: TipoUnidad.externa,
-              groupValue: _tipoUnidad,
-              onChanged: (TipoUnidad? value) {
-                setState(() {
-                  _tipoUnidad = value;
-                });
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: _tipoUnidad == TipoUnidad.externa
-              ? const ListTile(
-                  title: Text('Something goes here!'),
-                )
-              : Container(),
-        ),
-      ],
-    );
-  }
-}
-
-//scaffold unidad Forsis
-class UnidadForsis extends StatefulWidget {
-  const UnidadForsis({super.key});
-  @override
-  UnidadForsisState createState() => UnidadForsisState();
-}
-
-class UnidadForsisState extends State<UnidadForsis> {
-  bool _isVisible = true;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        DropdownMenu<String>(
+          width: 250,
+          initialSelection: tipoUnidad.first,
+          onSelected: (String? value) {
+            // This is called when the user selects an item.
+            setState(() {
+              dropdownValue = value!;
+              if (value != tipoUnidad.first) {
+                switch (value) {
+                  case "Forsis":
+                    setState(() {
+                      forsisVisible = true;
+                      externaVisible = false;
+                    });
+                    break;
+                  case "Externa":
+                    setState(() {
+                      forsisVisible = false;
+                      externaVisible = true;
+                    });
+                    break;
+                }
+              } else {
+                setState(() {
+                  forsisVisible = false;
+                  externaVisible = false;
+                });
+              }
+            });
+          },
+          dropdownMenuEntries:
+              tipoUnidad.map<DropdownMenuEntry<String>>((String value) {
+            return DropdownMenuEntry<String>(value: value, label: value);
+          }).toList(),
+        ),
+        const SizedBox(height: 10),
         Visibility(
-            visible: _isVisible,
+          visible: forsisVisible,
+          //Tipo de unidad Interna de Forsis
+          child: SingleChildScrollView(
             child: Column(
               children: [
-                const Text("test1"),
+                const Text("Unidad interna de Forsis"),
+                SizedBox(height: 10),
+                DropdownMenu<String>(
+                  width: 250,
+                  initialSelection: tipoUnidadInterna.first,
+                  onSelected: (String? value) {
+                    setState(() {
+                      dropdownTipoUnidadInterna = value!;
+                    });
+                    if (value == "Tracto") {
+                      setState(() {
+                        tractoInternoVisible = true;
+                      });
+                    } else {
+                      tractoInternoVisible = false;
+                    }
+                  },
+                  dropdownMenuEntries: tipoUnidadInterna
+                      .map<DropdownMenuEntry<String>>((String value) {
+                    return DropdownMenuEntry<String>(
+                        value: value, label: value);
+                  }).toList(),
+                ),
+                SizedBox(height: 10),
+                Visibility(
+                  visible: tractoInternoVisible,
+                  child: formTractoInterno(),
+                )
               ],
-            ))
+            ),
+          ),
+        ),
+        Visibility(
+          visible: externaVisible,
+          //Tipo de unidad Externa a Forsis
+          child: Text("Externa"),
+        ),
       ],
     );
   }
 }
-
-//scaffold unidad Externa

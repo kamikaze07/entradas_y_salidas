@@ -36,7 +36,7 @@ class _Body extends StatelessWidget {
             children: [
               const SizedBox(height: 50),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 70.0),
+                padding: const EdgeInsets.symmetric(horizontal: 50.0),
                 child: CupertinoButton.filled(
                   onPressed: () {
                     Navigator.push(
