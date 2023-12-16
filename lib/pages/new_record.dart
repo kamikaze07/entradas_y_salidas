@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:forsis/theme/theme.dart';
 import 'package:provider/provider.dart';
-import 'package:radio_group_v2/radio_group_v2.dart';
 import 'package:forsis/components/formTractoInterno.dart';
 
 class NewRecord extends StatelessWidget {
