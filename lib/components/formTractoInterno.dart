@@ -49,7 +49,7 @@ class formTractoInternoState extends State<formTractoInterno> {
         const SizedBox(height: 10),
         Row(
           children: [
-            Expanded(
+            const Expanded(
               child: TextField(
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
@@ -62,7 +62,7 @@ class formTractoInternoState extends State<formTractoInterno> {
             Expanded(
               child: Visibility(
                 visible: remolque2,
-                child: TextField(
+                child: const TextField(
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
