@@ -26,21 +26,6 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(height: 20),
-              Text("Unidad de Entrada o Salida:"),
-              RadioEntradaSalida(),
-              SizedBox(height: 10),
-              Text("Tipo de Unidad:"),
-              SizedBox(height: 10),
-              DropdownTipoUnidad(),
-            ],
-          ),
-        ),
-      ),*/
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: ListView(
@@ -61,6 +46,10 @@ class _Body extends StatelessWidget {
 
 //Radios Entrada o Salida
 enum TipoRegistro { entrada, salida }
+
+var TipoRegistro1;
+var TipoUnidad;
+var TipoUnidadInterna;
 
 class RadioEntradaSalida extends StatefulWidget {
   const RadioEntradaSalida({super.key});
@@ -85,6 +74,7 @@ class _RadioEntradaSalidaState extends State<RadioEntradaSalida> {
               onChanged: (TipoRegistro? value) {
                 setState(() {
                   _character = value;
+                  TipoRegistro1 = "Entrada";
                 });
               },
             ),
@@ -99,6 +89,7 @@ class _RadioEntradaSalidaState extends State<RadioEntradaSalida> {
               onChanged: (TipoRegistro? value) {
                 setState(() {
                   _character = value;
+                  TipoRegistro1 = "Salida";
                 });
               },
             ),
@@ -147,6 +138,7 @@ class _DropdownTipoUnidadState extends State<DropdownTipoUnidad> {
             // This is called when the user selects an item.
             setState(() {
               dropdownValue = value!;
+              TipoUnidad = value;
               if (value != tipoUnidad.first) {
                 switch (value) {
                   case "Forsis":
@@ -194,6 +186,7 @@ class _DropdownTipoUnidadState extends State<DropdownTipoUnidad> {
                     if (value == "Tracto") {
                       setState(() {
                         tractoInternoVisible = true;
+                        TipoUnidadInterna = "Tracto";
                       });
                     } else {
                       tractoInternoVisible = false;

@@ -1,4 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:forsis/pages/new_record.dart';
+
+final EconomicoController = TextEditingController();
+final Remolque1Controller = TextEditingController();
+final Remolque2Controller = TextEditingController();
 
 class formTractoInterno extends StatefulWidget {
   const formTractoInterno({super.key});
@@ -15,6 +21,45 @@ class formTractoInternoState extends State<formTractoInterno> {
   bool checkboxRefaccion2 = false;
   bool checkboxRefaccion3 = false;
   bool checkboxRefaccion4 = false;
+
+  void newRecord() {
+    var TipoRegistro = TipoRegistro1.toString();
+    var TipoUnidad1 = TipoUnidad.toString();
+    var TipoUnidadInterna1 = TipoUnidadInterna.toString();
+    var full1;
+    if (full) {
+      full1 = "FULL";
+    } else {
+      full1 = "SENCILLO";
+    }
+
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Datos:'),
+        content: Text(TipoRegistro +
+            '\n' +
+            TipoUnidad1 +
+            '\n' +
+            TipoUnidadInterna1 +
+            '\n' +
+            full1 +
+            '\n' +
+            EconomicoController.text +
+            '\n' +
+            Remolque1Controller.text),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            /// This parameter indicates this action is the default,
+            /// and turns the action's text to bold text.
+            isDefaultAction: true,
+            onPressed: () {},
+            child: const Text('Ok'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +82,12 @@ class formTractoInternoState extends State<formTractoInterno> {
             },
           ),
         ),
-        const SizedBox(
+        SizedBox(
           width: 250,
           child: TextField(
+              controller: EconomicoController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "Economico",
               )),
@@ -49,10 +95,11 @@ class formTractoInternoState extends State<formTractoInterno> {
         const SizedBox(height: 10),
         Row(
           children: [
-            const Expanded(
+            Expanded(
               child: TextField(
+                controller: Remolque1Controller,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "Remolque 1",
                 ),
@@ -62,9 +109,10 @@ class formTractoInternoState extends State<formTractoInterno> {
             Expanded(
               child: Visibility(
                 visible: remolque2,
-                child: const TextField(
+                child: TextField(
+                  controller: Remolque2Controller,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: "Remolque 2",
                   ),
@@ -132,6 +180,8 @@ class formTractoInternoState extends State<formTractoInterno> {
               keyboardType: TextInputType.multiline,
               maxLines: 5,
             ),
+            ElevatedButton(
+                onPressed: newRecord, child: const Text("Registrar")),
           ],
         ),
       ],
