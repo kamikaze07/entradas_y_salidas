@@ -47,7 +47,7 @@ class _Body extends StatelessWidget {
 //Radios Entrada o Salida
 enum TipoRegistro { entrada, salida }
 
-var TipoRegistro1;
+var TipoRegistro1 = "Entrada";
 var TipoUnidad;
 var TipoUnidadInterna;
 

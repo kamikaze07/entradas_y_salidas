@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:forsis/pages/new_record.dart';
+import 'package:forsis/pages/dashboard.dart';
 
 final EconomicoController = TextEditingController();
 final Remolque1Controller = TextEditingController();
 final Remolque2Controller = TextEditingController();
+final ObservacionesController = TextEditingController();
 
 class formTractoInterno extends StatefulWidget {
   const formTractoInterno({super.key});
@@ -22,7 +27,50 @@ class formTractoInternoState extends State<formTractoInterno> {
   bool checkboxRefaccion3 = false;
   bool checkboxRefaccion4 = false;
 
-  void newRecord() {
+  void _showAlertDialog(BuildContext context, String text) {
+    if (text == "Success") {
+      showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: const Text('Registro Exitoso'),
+          content: Text(text),
+          actions: <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              /// This parameter indicates this action is the default,
+              /// and turns the action's text to bold text.
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LauncherPage()));
+              },
+              child: const Text('Ok'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: const Text('Error en el Registro'),
+          content: Text(text),
+          actions: <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              /// This parameter indicates this action is the default,
+              /// and turns the action's text to bold text.
+              isDefaultAction: true,
+              onPressed: () {},
+              child: const Text('Ok'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  Future newRecord() async {
     var TipoRegistro = TipoRegistro1.toString();
     var TipoUnidad1 = TipoUnidad.toString();
     var TipoUnidadInterna1 = TipoUnidadInterna.toString();
@@ -32,33 +80,48 @@ class formTractoInternoState extends State<formTractoInterno> {
     } else {
       full1 = "SENCILLO";
     }
-
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: const Text('Datos:'),
-        content: Text(TipoRegistro +
-            '\n' +
-            TipoUnidad1 +
-            '\n' +
-            TipoUnidadInterna1 +
-            '\n' +
-            full1 +
-            '\n' +
-            EconomicoController.text +
-            '\n' +
-            Remolque1Controller.text),
-        actions: <CupertinoDialogAction>[
-          CupertinoDialogAction(
-            /// This parameter indicates this action is the default,
-            /// and turns the action's text to bold text.
-            isDefaultAction: true,
-            onPressed: () {},
-            child: const Text('Ok'),
-          ),
-        ],
-      ),
-    );
+    var Remolque2;
+    if (Remolque2Controller.text == "") {
+      Remolque2 = "No";
+    } else {
+      Remolque2 = Remolque2Controller.text;
+    }
+    var list = [
+      checkboxRefaccion1,
+      checkboxRefaccion2,
+      checkboxRefaccion3,
+      checkboxRefaccion4
+    ];
+    var NRefacciones = "Numero de Refacciones = 0";
+    var inc = 0;
+    for (var i = 0; i < list.length; i++) {
+      if (list[i]) {
+        inc++;
+        NRefacciones = "Numero de Refacciones = " + inc.toString();
+      }
+    }
+    var url = Uri.http(
+        "192.168.1.209", '/entradasysalidas/nEntradaSalidaForsis.php', {
+      'q': {'http'}
+    });
+    var response = await http.post(url, body: {
+      "TipoRegistro": TipoRegistro1,
+      "TipoUnidad": TipoUnidad,
+      "TipoUnidadInterna": TipoUnidadInterna1,
+      "Full": full1,
+      "Economico": EconomicoController.text,
+      "Remolque1": Remolque1Controller.text,
+      "Remolque2": Remolque2,
+      "NRefacciones": NRefacciones,
+      "Observaciones": ObservacionesController.text,
+    });
+    print(response.toString());
+    var data = json.decode(response.body);
+    if (data.toString() == "Success") {
+      _showAlertDialog(context, data.toString());
+    } else {
+      _showAlertDialog(context, data.toString());
+    }
   }
 
   @override
@@ -172,8 +235,9 @@ class formTractoInternoState extends State<formTractoInterno> {
                   ],
                 )),
             const SizedBox(height: 10),
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: ObservacionesController,
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "Observaciones",
               ),
