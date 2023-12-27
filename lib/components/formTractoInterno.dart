@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -110,6 +109,7 @@ class formTractoInternoState extends State<formTractoInterno> {
       "TipoUnidadInterna": TipoUnidadInterna1,
       "Full": full1,
       "Economico": EconomicoController.text,
+      "Empleado": "No",
       "Remolque1": Remolque1Controller.text,
       "Remolque2": Remolque2,
       "NRefacciones": NRefacciones,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:forsis/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:forsis/components/formTractoInterno.dart';
+import 'package:forsis/components/formUtilitarioForsis.dart';
 
 class NewRecord extends StatelessWidget {
   const NewRecord({super.key});
@@ -186,10 +187,13 @@ class _DropdownTipoUnidadState extends State<DropdownTipoUnidad> {
                     if (value == "Tracto") {
                       setState(() {
                         tractoInternoVisible = true;
+                        externaVisible = false; //
                         TipoUnidadInterna = "Tracto";
                       });
                     } else {
                       tractoInternoVisible = false;
+                      externaVisible = true;
+                      TipoUnidadInterna = "Utilitario";
                     }
                   },
                   dropdownMenuEntries: tipoUnidadInterna
@@ -210,7 +214,7 @@ class _DropdownTipoUnidadState extends State<DropdownTipoUnidad> {
         Visibility(
           visible: externaVisible,
           //Tipo de unidad Externa a Forsis
-          child: Text("Externa"),
+          child: formUtilitarioForsis(),
         ),
       ],
     );

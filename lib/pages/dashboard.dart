@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:forsis/theme/theme.dart';
 import 'package:forsis/pages/login_page.dart';
 import 'package:forsis/pages/new_record.dart';
+import 'package:http/http.dart' as http;
 
 class LauncherPage extends StatelessWidget {
   const LauncherPage({super.key});
@@ -23,7 +26,35 @@ class LauncherPage extends StatelessWidget {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends StatefulWidget {
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<_Body> {
+  var entradasYSalidas = [];
+
+  getEntradasYSalidas() async {
+    var url =
+        Uri.http("192.168.1.209", '/entradasysalidas/getEntradasYSalidas.php', {
+      'q': {'http'}
+    });
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      setState(() {
+        entradasYSalidas = jsonDecode(response.body);
+      });
+      print(entradasYSalidas);
+      return entradasYSalidas;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getEntradasYSalidas();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
