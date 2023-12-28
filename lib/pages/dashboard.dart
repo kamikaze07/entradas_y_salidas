@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,8 @@ import 'package:forsis/theme/theme.dart';
 import 'package:forsis/pages/login_page.dart';
 import 'package:forsis/pages/new_record.dart';
 import 'package:http/http.dart' as http;
+
+final Search = TextEditingController();
 
 class LauncherPage extends StatelessWidget {
   const LauncherPage({super.key});
@@ -44,7 +47,13 @@ class _BodyState extends State<_Body> {
       setState(() {
         entradasYSalidas = jsonDecode(response.body);
       });
-      print(entradasYSalidas);
+      for (var i = 0; i < entradasYSalidas.length; i++) {
+        if (entradasYSalidas[i]['TipoUnidad'] == "Forsis") {
+          entradasYSalidas[i]['Logo'] = "lib/images/logo_forsis.png";
+        } else {
+          entradasYSalidas[i]['Logo'] = "lib/images/externaLogo.png";
+        }
+      }
       return entradasYSalidas;
     }
   }
@@ -55,37 +64,69 @@ class _BodyState extends State<_Body> {
     getEntradasYSalidas();
   }
 
+  _searchEntradasYSalidas(String Search) async {
+    var url = Uri.http(
+        "192.168.1.209", '/entradasysalidas/searchEntradasYSalidas.php', {
+      'q': {'http'}
+    });
+    var response = await http.post(url, body: {
+      "search": Search,
+    });
+    if (response.statusCode == 200) {
+      setState(() {
+        entradasYSalidas = jsonDecode(response.body);
+      });
+      for (var i = 0; i < entradasYSalidas.length; i++) {
+        if (entradasYSalidas[i]['TipoUnidad'] == "Forsis") {
+          entradasYSalidas[i]['Logo'] = "lib/images/logo_forsis.png";
+        } else {
+          entradasYSalidas[i]['Logo'] = "lib/images/externaLogo.png";
+        }
+      }
+      return entradasYSalidas;
+    }
+  }
+
+  String searchEntradasYSalidas(String Search) {
+    setState(() {
+      entradasYSalidas.clear();
+      _searchEntradasYSalidas(Search);
+      print(entradasYSalidas);
+    });
+    return Search;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 50),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                child: CupertinoButton.filled(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NewRecord()));
-                  },
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.add_circle_outline), // icon
-                      Text("Nuevo Registro"), // text
-                    ],
-                  ),
+        floatingActionButton: AnimSearchBar(
+            width: 400,
+            textController: Search,
+            onSuffixTap: () {
+              setState(() {
+                Search.clear();
+              });
+            },
+            helpText: "Buscar...",
+            onSubmitted: searchEntradasYSalidas),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+        body: ListView.builder(
+            itemCount: entradasYSalidas.length,
+            itemBuilder: (context, index) {
+              return Card(
+                child: ListTile(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                  leading:
+                      Image.asset(entradasYSalidas[index]['Logo'], height: 30),
+                  title: Text(entradasYSalidas[index]['TipoRegistro'] +
+                      " - " +
+                      entradasYSalidas[index]['TipoUnidad1'] +
+                      " " +
+                      entradasYSalidas[index]['Economico']),
+                  trailing: Text(entradasYSalidas[index]['Fecha'].toString()),
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+              );
+            }));
   }
 }
 
@@ -102,6 +143,15 @@ class _MenuPrincipal extends StatelessWidget {
               'lib/images/logo_forsis.png',
               height: 100,
             ),
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.add,
+              color: accentColor,
+            ),
+            title: const Text('Nuevo Registro'),
+            onTap: () => Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => NewRecord())),
           ),
           SafeArea(
             top: false,
