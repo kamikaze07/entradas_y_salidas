@@ -46,7 +46,9 @@ class LoginPage extends StatelessWidget {
               /// This parameter indicates this action is the default,
               /// and turns the action's text to bold text.
               isDefaultAction: true,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: const Text('Ok'),
             ),
           ],

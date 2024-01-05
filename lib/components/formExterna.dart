@@ -5,18 +5,17 @@ import 'package:http/http.dart' as http;
 import 'package:forsis/pages/new_record.dart';
 import 'package:forsis/pages/dashboard.dart';
 
-class formUtilitarioForsis extends StatefulWidget {
-  const formUtilitarioForsis({super.key});
+class formExterna extends StatefulWidget {
+  const formExterna({super.key});
 
   @override
-  State<formUtilitarioForsis> createState() => formUtilitarioForsisState();
+  State<formExterna> createState() => formExternaState();
 }
 
-class formUtilitarioForsisState extends State<formUtilitarioForsis> {
-  final EconomicoController = TextEditingController();
-  final EmpleadoController = TextEditingController();
+class formExternaState extends State<formExterna> {
+  final placasController = TextEditingController();
+  final visitanteController = TextEditingController();
   final ObservacionesController = TextEditingController();
-
   bool full = false;
   bool remolque2 = false;
   bool fullRefacc = false;
@@ -24,13 +23,13 @@ class formUtilitarioForsisState extends State<formUtilitarioForsis> {
   bool checkboxRefaccion2 = false;
   bool checkboxRefaccion3 = false;
   bool checkboxRefaccion4 = false;
-  var economicoInputStatus = Colors.grey;
-  var empleadoInputStatus = Colors.grey;
+  var placasInputStatus = Colors.grey;
+  var visitanteInputStatus = Colors.grey;
 
   @override
   void dispose() {
-    EconomicoController.dispose();
-    EmpleadoController.dispose();
+    placasController.dispose();
+    visitanteController.dispose();
     ObservacionesController.dispose();
     super.dispose();
   }
@@ -89,13 +88,13 @@ class formUtilitarioForsisState extends State<formUtilitarioForsis> {
     var response = await http.post(url, body: {
       "TipoRegistro": TipoRegistro1,
       "TipoUnidad": TipoUnidad,
-      "TipoUnidadInterna": TipoUnidadInterna1,
+      "TipoUnidadInterna": "Externa",
       "Full": "No",
-      "Economico": EconomicoController.text,
-      "Empleado": EmpleadoController.text,
+      "Economico": "N° de Placas: " + placasController.text,
+      "Empleado": "Visitiante o Proveedor: " + visitanteController.text,
       "Remolque1": "No",
       "Remolque2": "No",
-      "TipoRemolque1": "Np",
+      "TipoRemolque1": "No",
       "TipoRemolque2": "No",
       "NRefacciones": "No",
       "Observaciones": ObservacionesController.text,
@@ -117,19 +116,18 @@ class formUtilitarioForsisState extends State<formUtilitarioForsis> {
         SizedBox(
           width: 250,
           child: TextField(
-              controller: EconomicoController,
-              keyboardType: TextInputType.number,
+              controller: placasController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: "Economico*",
+                labelText: "Placas*",
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.clear),
                   onPressed: () {
-                    EconomicoController.clear();
+                    placasController.clear();
                   },
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: economicoInputStatus),
+                  borderSide: BorderSide(color: placasInputStatus),
                 ),
               )),
         ),
@@ -137,18 +135,18 @@ class formUtilitarioForsisState extends State<formUtilitarioForsis> {
         SizedBox(
           width: 250,
           child: TextField(
-            controller: EmpleadoController,
+            controller: visitanteController,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: "Empleado*",
+              labelText: "Nombre del Visitante o Proveedor*",
               suffixIcon: IconButton(
                 icon: const Icon(Icons.clear),
                 onPressed: () {
-                  EmpleadoController.clear();
+                  visitanteController.clear();
                 },
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: empleadoInputStatus),
+                borderSide: BorderSide(color: visitanteInputStatus),
               ),
             ),
           ),
@@ -169,29 +167,28 @@ class formUtilitarioForsisState extends State<formUtilitarioForsis> {
             CupertinoButton.filled(
               onPressed: () {
                 var err = 0;
-                if (EconomicoController.text == "") {
+                if (placasController.text == "") {
                   setState(() {
-                    economicoInputStatus = Colors.red;
+                    placasInputStatus = Colors.red;
                     err++;
                   });
                 } else {
                   setState(() {
-                    economicoInputStatus = Colors.grey;
+                    placasInputStatus = Colors.grey;
                   });
                 }
-                if (EmpleadoController.text == "") {
+                if (visitanteController.text == "") {
                   setState(() {
-                    empleadoInputStatus = Colors.red;
+                    visitanteInputStatus = Colors.red;
                     err++;
                   });
                 } else {
                   setState(() {
-                    empleadoInputStatus = Colors.grey;
+                    visitanteInputStatus = Colors.grey;
                   });
                 }
                 if (err > 0) {
-                  _showAlertDialog(
-                      context, "Ingresa todos los campos Requeridos*");
+                  _showAlertDialog(context, "Ingresa todos los campos");
                 } else {
                   showCupertinoModalPopup<void>(
                     context: context,

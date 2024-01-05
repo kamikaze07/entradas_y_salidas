@@ -87,6 +87,26 @@ class _BodyState extends State<_Body> {
     }
   }
 
+  Future refresh() async {
+    var url =
+        Uri.http("192.168.1.209", '/entradasysalidas/getEntradasYSalidas.php', {
+      'q': {'http'}
+    });
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      setState(() {
+        entradasYSalidas = jsonDecode(response.body);
+      });
+      for (var i = 0; i < entradasYSalidas.length; i++) {
+        if (entradasYSalidas[i]['TipoUnidad'] == "Forsis") {
+          entradasYSalidas[i]['Logo'] = "lib/images/logo_forsis.png";
+        } else {
+          entradasYSalidas[i]['Logo'] = "lib/images/externaLogo.png";
+        }
+      }
+    }
+  }
+
   String searchEntradasYSalidas(String Search) {
     setState(() {
       entradasYSalidas.clear();
@@ -110,23 +130,26 @@ class _BodyState extends State<_Body> {
             helpText: "Buscar...",
             onSubmitted: searchEntradasYSalidas),
         floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-        body: ListView.builder(
-            itemCount: entradasYSalidas.length,
-            itemBuilder: (context, index) {
-              return Card(
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                  leading:
-                      Image.asset(entradasYSalidas[index]['Logo'], height: 30),
-                  title: Text(entradasYSalidas[index]['TipoRegistro'] +
-                      " - " +
-                      entradasYSalidas[index]['TipoUnidad1'] +
-                      " " +
-                      entradasYSalidas[index]['Economico']),
-                  trailing: Text(entradasYSalidas[index]['Fecha'].toString()),
-                ),
-              );
-            }));
+        body: RefreshIndicator(
+          onRefresh: refresh,
+          child: ListView.builder(
+              itemCount: entradasYSalidas.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                    leading: Image.asset(entradasYSalidas[index]['Logo'],
+                        height: 30),
+                    title: Text(entradasYSalidas[index]['TipoRegistro'] +
+                        " - " +
+                        entradasYSalidas[index]['TipoUnidad1'] +
+                        " " +
+                        entradasYSalidas[index]['Economico']),
+                    trailing: Text(entradasYSalidas[index]['Fecha'].toString()),
+                  ),
+                );
+              }),
+        ));
   }
 }
 
@@ -145,14 +168,14 @@ class _MenuPrincipal extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(
-              Icons.add,
-              color: accentColor,
-            ),
-            title: const Text('Nuevo Registro'),
-            onTap: () => Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => NewRecord())),
-          ),
+              leading: Icon(
+                Icons.add,
+                color: accentColor,
+              ),
+              title: const Text('Nuevo Registro'),
+              onTap: () {
+                Navigator.of(context).pushNamed('/new_record');
+              }),
           SafeArea(
             top: false,
             left: false,
@@ -172,14 +195,15 @@ class _MenuPrincipal extends StatelessWidget {
           ),
           SafeArea(
             child: ListTile(
-              leading: Icon(
-                Icons.logout,
-                color: accentColor,
-              ),
-              title: const Text("Salir"),
-              onTap: () => Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => LoginPage())),
-            ),
+                leading: Icon(
+                  Icons.logout,
+                  color: accentColor,
+                ),
+                title: const Text("Salir"),
+                onTap: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/Login', (Route<dynamic> route) => false);
+                }),
           ),
         ],
       ),

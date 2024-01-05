@@ -4,6 +4,7 @@ import 'package:forsis/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:forsis/components/formTractoInterno.dart';
 import 'package:forsis/components/formUtilitarioForsis.dart';
+import 'package:forsis/components/formExterna.dart';
 
 class NewRecord extends StatelessWidget {
   const NewRecord({super.key});
@@ -127,7 +128,7 @@ class _DropdownTipoUnidadState extends State<DropdownTipoUnidad> {
   bool forsisVisible = false;
   bool externaVisible = false;
   bool tractoInternoVisible = false;
-
+  bool UtilitarioVisible = false;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -151,7 +152,9 @@ class _DropdownTipoUnidadState extends State<DropdownTipoUnidad> {
                   case "Externa":
                     setState(() {
                       forsisVisible = false;
-                      externaVisible = true;
+                      tractoInternoVisible = false;
+                      UtilitarioVisible = false;
+                      externaVisible = true; //actoInternoVisible = fal; //
                     });
                     break;
                 }
@@ -159,6 +162,8 @@ class _DropdownTipoUnidadState extends State<DropdownTipoUnidad> {
                 setState(() {
                   forsisVisible = false;
                   externaVisible = false;
+                  tractoInternoVisible = false;
+                  UtilitarioVisible = false;
                 });
               }
             });
@@ -187,13 +192,17 @@ class _DropdownTipoUnidadState extends State<DropdownTipoUnidad> {
                     if (value == "Tracto") {
                       setState(() {
                         tractoInternoVisible = true;
-                        externaVisible = false; //
+                        externaVisible = false;
+                        UtilitarioVisible = false;
                         TipoUnidadInterna = "Tracto";
                       });
+                    } else if (value == "Utilitario") {
+                      tractoInternoVisible = false;
+                      UtilitarioVisible = true;
+                      TipoUnidadInterna = "Utilitario";
                     } else {
                       tractoInternoVisible = false;
-                      externaVisible = true;
-                      TipoUnidadInterna = "Utilitario";
+                      UtilitarioVisible = false;
                     }
                   },
                   dropdownMenuEntries: tipoUnidadInterna
@@ -212,9 +221,13 @@ class _DropdownTipoUnidadState extends State<DropdownTipoUnidad> {
           ),
         ),
         Visibility(
-          visible: externaVisible,
+          visible: UtilitarioVisible,
           //Tipo de unidad Externa a Forsis
           child: formUtilitarioForsis(),
+        ),
+        Visibility(
+          visible: externaVisible,
+          child: formExterna(),
         ),
       ],
     );

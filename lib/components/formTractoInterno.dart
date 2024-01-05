@@ -5,11 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:forsis/pages/new_record.dart';
 import 'package:forsis/pages/dashboard.dart';
 
-final EconomicoController = TextEditingController();
-final Remolque1Controller = TextEditingController();
-final Remolque2Controller = TextEditingController();
-final ObservacionesController = TextEditingController();
-
 class formTractoInterno extends StatefulWidget {
   const formTractoInterno({super.key});
 
@@ -17,7 +12,24 @@ class formTractoInterno extends StatefulWidget {
   State<formTractoInterno> createState() => formTractoInternoState();
 }
 
+const List<String> tipoRemolque = <String>[
+  'Selecciona el Tipo de Remolque',
+  'Porta de 20"',
+  'Porta de 40"',
+  'Porta de 53"',
+  'Pipa',
+  'Gondola',
+  'Tolva',
+  'Fractank',
+];
+
 class formTractoInternoState extends State<formTractoInterno> {
+  final EconomicoController = TextEditingController();
+  final Remolque1Controller = TextEditingController();
+  final Remolque2Controller = TextEditingController();
+  final ObservacionesController = TextEditingController();
+  String tipoRemolque1 = tipoRemolque.first;
+  String tipoRemolque2 = tipoRemolque.first;
   bool full = false;
   bool remolque2 = false;
   bool fullRefacc = false;
@@ -25,6 +37,22 @@ class formTractoInternoState extends State<formTractoInterno> {
   bool checkboxRefaccion2 = false;
   bool checkboxRefaccion3 = false;
   bool checkboxRefaccion4 = false;
+  bool textTipoRemolque2 = false;
+  bool dropdownTipoRemolque2 = false;
+  var economicoInputStatus = Colors.grey;
+  var remolque1InputStatus = Colors.grey;
+  var remolque2InputStatus = Colors.grey;
+  var dropdwnremolque1InputStatus = Colors.grey;
+  var dropdwnremolque2InputStatus = Colors.grey;
+
+  @override
+  void dispose() {
+    EconomicoController.dispose();
+    Remolque1Controller.dispose();
+    Remolque2Controller.dispose();
+    ObservacionesController.dispose();
+    super.dispose();
+  }
 
   void _showAlertDialog(BuildContext context, String text) {
     if (text == "Success") {
@@ -39,10 +67,8 @@ class formTractoInternoState extends State<formTractoInterno> {
               /// and turns the action's text to bold text.
               isDefaultAction: true,
               onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LauncherPage()));
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/dashboard', (Route<dynamic> route) => false);
               },
               child: const Text('Ok'),
             ),
@@ -60,7 +86,9 @@ class formTractoInternoState extends State<formTractoInterno> {
               /// This parameter indicates this action is the default,
               /// and turns the action's text to bold text.
               isDefaultAction: true,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: const Text('Ok'),
             ),
           ],
@@ -84,6 +112,12 @@ class formTractoInternoState extends State<formTractoInterno> {
       Remolque2 = "No";
     } else {
       Remolque2 = Remolque2Controller.text;
+    }
+    var _tipoRemolque2;
+    if (tipoRemolque2 == tipoRemolque.first) {
+      _tipoRemolque2 = "No";
+    } else {
+      _tipoRemolque2 = tipoRemolque2;
     }
     var list = [
       checkboxRefaccion1,
@@ -112,6 +146,8 @@ class formTractoInternoState extends State<formTractoInterno> {
       "Empleado": "No",
       "Remolque1": Remolque1Controller.text,
       "Remolque2": Remolque2,
+      "TipoRemolque1": tipoRemolque1,
+      "TipoRemolque2": _tipoRemolque2,
       "NRefacciones": NRefacciones,
       "Observaciones": ObservacionesController.text,
     });
@@ -122,6 +158,10 @@ class formTractoInternoState extends State<formTractoInterno> {
     } else {
       _showAlertDialog(context, data.toString());
     }
+  }
+
+  void clearText(TextEditingController textEditingController) {
+    textEditingController.clear();
   }
 
   @override
@@ -141,6 +181,8 @@ class formTractoInternoState extends State<formTractoInterno> {
                 full = value!;
                 remolque2 = value;
                 fullRefacc = value;
+                textTipoRemolque2 = value;
+                dropdownTipoRemolque2 = value;
               });
             },
           ),
@@ -150,9 +192,18 @@ class formTractoInternoState extends State<formTractoInterno> {
           child: TextField(
               controller: EconomicoController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: "Economico",
+                labelText: "Economico*",
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    EconomicoController.clear();
+                  },
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: economicoInputStatus),
+                ),
               )),
         ),
         const SizedBox(height: 10),
@@ -162,9 +213,18 @@ class formTractoInternoState extends State<formTractoInterno> {
               child: TextField(
                 controller: Remolque1Controller,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: "Remolque 1",
+                  labelText: "Remolque 1*",
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      Remolque1Controller.clear();
+                    },
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: remolque1InputStatus),
+                  ),
                 ),
               ),
             ),
@@ -175,13 +235,85 @@ class formTractoInternoState extends State<formTractoInterno> {
                 child: TextField(
                   controller: Remolque2Controller,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: "Remolque 2",
+                    labelText: "Remolque 2*",
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        Remolque2Controller.clear();
+                      },
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: remolque2InputStatus),
+                    ),
                   ),
                 ),
               ),
             ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            const SizedBox(
+              height: 15,
+              child: Text("Tipo Remolque 1*"),
+            ),
+            const SizedBox(width: 80),
+            Visibility(
+              visible: textTipoRemolque2,
+              child: const SizedBox(
+                height: 15,
+                child: Text("Tipo Remolque 2*"),
+              ),
+            )
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+                child: DropdownMenu<String>(
+                    width: 150,
+                    initialSelection: tipoRemolque.first,
+                    onSelected: (String? value) {
+                      setState(() {
+                        tipoRemolque1 = value!;
+                      });
+                    },
+                    dropdownMenuEntries: tipoRemolque
+                        .map<DropdownMenuEntry<String>>((String value) {
+                      return DropdownMenuEntry<String>(
+                          value: value, label: value);
+                    }).toList(),
+                    inputDecorationTheme: InputDecorationTheme(
+                        enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: dropdwnremolque1InputStatus),
+                    )))),
+            Visibility(
+              visible: dropdownTipoRemolque2,
+              child: Expanded(
+                  child: DropdownMenu<String>(
+                      width: 150,
+                      initialSelection: tipoRemolque.first,
+                      onSelected: (String? value) {
+                        setState(() {
+                          tipoRemolque2 = value!;
+                        });
+                      },
+                      dropdownMenuEntries: tipoRemolque
+                          .map<DropdownMenuEntry<String>>((String value) {
+                        return DropdownMenuEntry<String>(
+                            value: value, label: value);
+                      }).toList(),
+                      inputDecorationTheme: InputDecorationTheme(
+                          enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: dropdwnremolque2InputStatus),
+                      )))),
+            )
           ],
         ),
         const SizedBox(height: 10),
@@ -244,8 +376,162 @@ class formTractoInternoState extends State<formTractoInterno> {
               keyboardType: TextInputType.multiline,
               maxLines: 5,
             ),
-            ElevatedButton(
-                onPressed: newRecord, child: const Text("Registrar")),
+            const SizedBox(height: 30),
+            CupertinoButton.filled(
+              onPressed: () {
+                var err = 0;
+                if (full) {
+                  if (EconomicoController.text == "") {
+                    setState(() {
+                      economicoInputStatus = Colors.red;
+                      err++;
+                    });
+                  } else {
+                    setState(() {
+                      economicoInputStatus = Colors.grey;
+                    });
+                  }
+                  if (Remolque1Controller.text == "") {
+                    setState(() {
+                      remolque1InputStatus = Colors.red;
+                      err++;
+                    });
+                  } else {
+                    setState(() {
+                      remolque1InputStatus = Colors.grey;
+                    });
+                  }
+                  if (Remolque2Controller.text == "") {
+                    setState(() {
+                      remolque2InputStatus = Colors.red;
+                      err++;
+                    });
+                  } else {
+                    setState(() {
+                      remolque2InputStatus = Colors.grey;
+                    });
+                  }
+                  if (tipoRemolque1 == tipoRemolque.first) {
+                    setState(() {
+                      dropdwnremolque1InputStatus = Colors.red;
+                      err++;
+                    });
+                  } else {
+                    setState(() {
+                      dropdwnremolque1InputStatus = Colors.grey;
+                    });
+                  }
+                  if (tipoRemolque2 == tipoRemolque.first) {
+                    setState(() {
+                      dropdwnremolque2InputStatus = Colors.red;
+                      err++;
+                    });
+                  } else {
+                    setState(() {
+                      dropdwnremolque2InputStatus = Colors.grey;
+                    });
+                  }
+                  if (err > 0) {
+                    _showAlertDialog(context, "Ingresa todos los campos");
+                  } else {
+                    showCupertinoModalPopup<void>(
+                      context: context,
+                      builder: (BuildContext context) => CupertinoAlertDialog(
+                        title: const Text('Nuevo Registro'),
+                        content:
+                            Text('¿Registrar nueva ' + TipoRegistro1 + '?'),
+                        actions: <CupertinoDialogAction>[
+                          CupertinoDialogAction(
+                            /// This parameter indicates this action is the default,
+                            /// and turns the action's text to bold text.
+                            isDefaultAction: true,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('No'),
+                          ),
+                          CupertinoDialogAction(
+                            /// This parameter indicates the action would perform
+                            /// a destructive action such as deletion, and turns
+                            /// the action's text color to red.
+                            isDestructiveAction: true,
+                            onPressed: () {
+                              newRecord();
+                            },
+                            child: const Text('Si'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                } else {
+                  if (EconomicoController.text == "") {
+                    setState(() {
+                      economicoInputStatus = Colors.red;
+                      err++;
+                    });
+                  } else {
+                    setState(() {
+                      economicoInputStatus = Colors.grey;
+                    });
+                  }
+                  if (Remolque1Controller.text == "") {
+                    setState(() {
+                      remolque1InputStatus = Colors.red;
+                      err++;
+                    });
+                  } else {
+                    setState(() {
+                      remolque1InputStatus = Colors.grey;
+                    });
+                  }
+                  if (tipoRemolque1 == tipoRemolque.first) {
+                    setState(() {
+                      dropdwnremolque1InputStatus = Colors.red;
+                      err++;
+                    });
+                  } else {
+                    setState(() {
+                      dropdwnremolque1InputStatus = Colors.grey;
+                    });
+                  }
+                  if (err > 0) {
+                    _showAlertDialog(context, "Ingresa todos los campos");
+                  } else {
+                    showCupertinoModalPopup<void>(
+                      context: context,
+                      builder: (BuildContext context) => CupertinoAlertDialog(
+                        title: const Text('Nuevo Registro'),
+                        content:
+                            Text('¿Registrar nueva ' + TipoRegistro1 + '?'),
+                        actions: <CupertinoDialogAction>[
+                          CupertinoDialogAction(
+                            /// This parameter indicates this action is the default,
+                            /// and turns the action's text to bold text.
+                            isDefaultAction: true,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('No'),
+                          ),
+                          CupertinoDialogAction(
+                            /// This parameter indicates the action would perform
+                            /// a destructive action such as deletion, and turns
+                            /// the action's text color to red.
+                            isDestructiveAction: true,
+                            onPressed: () {
+                              newRecord();
+                            },
+                            child: const Text('Si'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                }
+              },
+              child: const Text('Registrar'),
+            ),
           ],
         ),
       ],
