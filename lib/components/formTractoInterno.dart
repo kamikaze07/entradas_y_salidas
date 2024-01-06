@@ -24,12 +24,11 @@ const List<String> tipoRemolque = <String>[
 ];
 
 class formTractoInternoState extends State<formTractoInterno> {
-  final EconomicoController = TextEditingController();
-  final Remolque1Controller = TextEditingController();
-  final Remolque2Controller = TextEditingController();
-  final ObservacionesController = TextEditingController();
+  final economicoController = TextEditingController();
+  final remolque1Controller = TextEditingController();
+  final remolque2Controller = TextEditingController();
+  final observacionesController = TextEditingController();
   String tipoRemolque1 = tipoRemolque.first;
-  String tipoRemolque2 = tipoRemolque.first;
   bool full = false;
   bool remolque2 = false;
   bool fullRefacc = false;
@@ -37,8 +36,6 @@ class formTractoInternoState extends State<formTractoInterno> {
   bool checkboxRefaccion2 = false;
   bool checkboxRefaccion3 = false;
   bool checkboxRefaccion4 = false;
-  bool textTipoRemolque2 = false;
-  bool dropdownTipoRemolque2 = false;
   var economicoInputStatus = Colors.grey;
   var remolque1InputStatus = Colors.grey;
   var remolque2InputStatus = Colors.grey;
@@ -47,10 +44,10 @@ class formTractoInternoState extends State<formTractoInterno> {
 
   @override
   void dispose() {
-    EconomicoController.dispose();
-    Remolque1Controller.dispose();
-    Remolque2Controller.dispose();
-    ObservacionesController.dispose();
+    economicoController.dispose();
+    remolque1Controller.dispose();
+    remolque2Controller.dispose();
+    observacionesController.dispose();
     super.dispose();
   }
 
@@ -108,16 +105,10 @@ class formTractoInternoState extends State<formTractoInterno> {
       full1 = "SENCILLO";
     }
     var Remolque2;
-    if (Remolque2Controller.text == "") {
+    if (remolque2Controller.text == "") {
       Remolque2 = "No";
     } else {
-      Remolque2 = Remolque2Controller.text;
-    }
-    var _tipoRemolque2;
-    if (tipoRemolque2 == tipoRemolque.first) {
-      _tipoRemolque2 = "No";
-    } else {
-      _tipoRemolque2 = tipoRemolque2;
+      Remolque2 = remolque2Controller.text;
     }
     var list = [
       checkboxRefaccion1,
@@ -142,14 +133,13 @@ class formTractoInternoState extends State<formTractoInterno> {
       "TipoUnidad": TipoUnidad,
       "TipoUnidadInterna": TipoUnidadInterna1,
       "Full": full1,
-      "Economico": EconomicoController.text,
+      "Economico": economicoController.text,
       "Empleado": "No",
-      "Remolque1": Remolque1Controller.text,
+      "Remolque1": remolque1Controller.text,
       "Remolque2": Remolque2,
       "TipoRemolque1": tipoRemolque1,
-      "TipoRemolque2": _tipoRemolque2,
       "NRefacciones": NRefacciones,
-      "Observaciones": ObservacionesController.text,
+      "Observaciones": observacionesController.text,
     });
     print(response.toString());
     var data = json.decode(response.body);
@@ -181,8 +171,6 @@ class formTractoInternoState extends State<formTractoInterno> {
                 full = value!;
                 remolque2 = value;
                 fullRefacc = value;
-                textTipoRemolque2 = value;
-                dropdownTipoRemolque2 = value;
               });
             },
           ),
@@ -190,7 +178,7 @@ class formTractoInternoState extends State<formTractoInterno> {
         SizedBox(
           width: 250,
           child: TextField(
-              controller: EconomicoController,
+              controller: economicoController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -198,7 +186,7 @@ class formTractoInternoState extends State<formTractoInterno> {
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.clear),
                   onPressed: () {
-                    EconomicoController.clear();
+                    economicoController.clear();
                   },
                 ),
                 enabledBorder: OutlineInputBorder(
@@ -211,7 +199,7 @@ class formTractoInternoState extends State<formTractoInterno> {
           children: [
             Expanded(
               child: TextField(
-                controller: Remolque1Controller,
+                controller: remolque1Controller,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -219,7 +207,7 @@ class formTractoInternoState extends State<formTractoInterno> {
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.clear),
                     onPressed: () {
-                      Remolque1Controller.clear();
+                      remolque1Controller.clear();
                     },
                   ),
                   enabledBorder: OutlineInputBorder(
@@ -233,7 +221,7 @@ class formTractoInternoState extends State<formTractoInterno> {
               child: Visibility(
                 visible: remolque2,
                 child: TextField(
-                  controller: Remolque2Controller,
+                  controller: remolque2Controller,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -241,7 +229,7 @@ class formTractoInternoState extends State<formTractoInterno> {
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.clear),
                       onPressed: () {
-                        Remolque2Controller.clear();
+                        remolque2Controller.clear();
                       },
                     ),
                     enabledBorder: OutlineInputBorder(
@@ -254,68 +242,26 @@ class formTractoInternoState extends State<formTractoInterno> {
           ],
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            const SizedBox(
-              height: 15,
-              child: Text("Tipo Remolque 1*"),
-            ),
-            const SizedBox(width: 80),
-            Visibility(
-              visible: textTipoRemolque2,
-              child: const SizedBox(
-                height: 15,
-                child: Text("Tipo Remolque 2*"),
-              ),
-            )
-          ],
+        const SizedBox(
+          height: 15,
+          child: Text("Tipo Remolque*"),
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-                child: DropdownMenu<String>(
-                    width: 150,
-                    initialSelection: tipoRemolque.first,
-                    onSelected: (String? value) {
-                      setState(() {
-                        tipoRemolque1 = value!;
-                      });
-                    },
-                    dropdownMenuEntries: tipoRemolque
-                        .map<DropdownMenuEntry<String>>((String value) {
-                      return DropdownMenuEntry<String>(
-                          value: value, label: value);
-                    }).toList(),
-                    inputDecorationTheme: InputDecorationTheme(
-                        enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: dropdwnremolque1InputStatus),
-                    )))),
-            Visibility(
-              visible: dropdownTipoRemolque2,
-              child: Expanded(
-                  child: DropdownMenu<String>(
-                      width: 150,
-                      initialSelection: tipoRemolque.first,
-                      onSelected: (String? value) {
-                        setState(() {
-                          tipoRemolque2 = value!;
-                        });
-                      },
-                      dropdownMenuEntries: tipoRemolque
-                          .map<DropdownMenuEntry<String>>((String value) {
-                        return DropdownMenuEntry<String>(
-                            value: value, label: value);
-                      }).toList(),
-                      inputDecorationTheme: InputDecorationTheme(
-                          enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: dropdwnremolque2InputStatus),
-                      )))),
-            )
-          ],
-        ),
+        DropdownMenu<String>(
+            initialSelection: tipoRemolque.first,
+            onSelected: (String? value) {
+              setState(() {
+                tipoRemolque1 = value!;
+              });
+            },
+            dropdownMenuEntries:
+                tipoRemolque.map<DropdownMenuEntry<String>>((String value) {
+              return DropdownMenuEntry<String>(value: value, label: value);
+            }).toList(),
+            inputDecorationTheme: InputDecorationTheme(
+                enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: dropdwnremolque1InputStatus),
+            ))),
         const SizedBox(height: 10),
         const Text("Elementos"),
         const SizedBox(height: 10),
@@ -368,7 +314,7 @@ class formTractoInternoState extends State<formTractoInterno> {
                 )),
             const SizedBox(height: 10),
             TextField(
-              controller: ObservacionesController,
+              controller: observacionesController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "Observaciones",
@@ -381,7 +327,7 @@ class formTractoInternoState extends State<formTractoInterno> {
               onPressed: () {
                 var err = 0;
                 if (full) {
-                  if (EconomicoController.text == "") {
+                  if (economicoController.text == "") {
                     setState(() {
                       economicoInputStatus = Colors.red;
                       err++;
@@ -391,7 +337,7 @@ class formTractoInternoState extends State<formTractoInterno> {
                       economicoInputStatus = Colors.grey;
                     });
                   }
-                  if (Remolque1Controller.text == "") {
+                  if (remolque1Controller.text == "") {
                     setState(() {
                       remolque1InputStatus = Colors.red;
                       err++;
@@ -401,7 +347,7 @@ class formTractoInternoState extends State<formTractoInterno> {
                       remolque1InputStatus = Colors.grey;
                     });
                   }
-                  if (Remolque2Controller.text == "") {
+                  if (remolque2Controller.text == "") {
                     setState(() {
                       remolque2InputStatus = Colors.red;
                       err++;
@@ -419,16 +365,6 @@ class formTractoInternoState extends State<formTractoInterno> {
                   } else {
                     setState(() {
                       dropdwnremolque1InputStatus = Colors.grey;
-                    });
-                  }
-                  if (tipoRemolque2 == tipoRemolque.first) {
-                    setState(() {
-                      dropdwnremolque2InputStatus = Colors.red;
-                      err++;
-                    });
-                  } else {
-                    setState(() {
-                      dropdwnremolque2InputStatus = Colors.grey;
                     });
                   }
                   if (err > 0) {
@@ -465,7 +401,7 @@ class formTractoInternoState extends State<formTractoInterno> {
                     );
                   }
                 } else {
-                  if (EconomicoController.text == "") {
+                  if (economicoController.text == "") {
                     setState(() {
                       economicoInputStatus = Colors.red;
                       err++;
@@ -475,7 +411,7 @@ class formTractoInternoState extends State<formTractoInterno> {
                       economicoInputStatus = Colors.grey;
                     });
                   }
-                  if (Remolque1Controller.text == "") {
+                  if (remolque1Controller.text == "") {
                     setState(() {
                       remolque1InputStatus = Colors.red;
                       err++;
