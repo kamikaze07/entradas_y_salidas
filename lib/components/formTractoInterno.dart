@@ -14,9 +14,9 @@ class formTractoInterno extends StatefulWidget {
 
 const List<String> tipoRemolque = <String>[
   'Selecciona el Tipo de Remolque',
-  'Porta de 20"',
-  'Porta de 40"',
-  'Porta de 53"',
+  "Porta de 20'",
+  "Porta de 40'",
+  "Porta de 53'",
   'Pipa',
   'Gondola',
   'Tolva',
@@ -28,6 +28,7 @@ class formTractoInternoState extends State<formTractoInterno> {
   final remolque1Controller = TextEditingController();
   final remolque2Controller = TextEditingController();
   final observacionesController = TextEditingController();
+  final contenedoresController = TextEditingController();
   String tipoRemolque1 = tipoRemolque.first;
   bool full = false;
   bool remolque2 = false;
@@ -36,11 +37,13 @@ class formTractoInternoState extends State<formTractoInterno> {
   bool checkboxRefaccion2 = false;
   bool checkboxRefaccion3 = false;
   bool checkboxRefaccion4 = false;
+  bool contenedoresVisible = false;
   var economicoInputStatus = Colors.grey;
   var remolque1InputStatus = Colors.grey;
   var remolque2InputStatus = Colors.grey;
   var dropdwnremolque1InputStatus = Colors.grey;
   var dropdwnremolque2InputStatus = Colors.grey;
+  var contenedoresInputStatus = Colors.grey;
 
   @override
   void dispose() {
@@ -252,6 +255,13 @@ class formTractoInternoState extends State<formTractoInterno> {
             onSelected: (String? value) {
               setState(() {
                 tipoRemolque1 = value!;
+                if (value == "Porta de 20'" ||
+                    value == "Porta de 40'" ||
+                    value == "Porta de 53'") {
+                  contenedoresVisible = true;
+                } else {
+                  contenedoresVisible = false;
+                }
               });
             },
             dropdownMenuEntries:
@@ -263,6 +273,25 @@ class formTractoInternoState extends State<formTractoInterno> {
               borderSide: BorderSide(color: dropdwnremolque1InputStatus),
             ))),
         const SizedBox(height: 10),
+        Visibility(
+          visible: contenedoresVisible,
+          child: TextField(
+            controller: contenedoresController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: "Contenedores o Isotanques*",
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  contenedoresController.clear();
+                },
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: contenedoresInputStatus),
+              ),
+            ),
+          ),
+        ),
         const Text("Elementos"),
         const SizedBox(height: 10),
         Column(
@@ -367,6 +396,16 @@ class formTractoInternoState extends State<formTractoInterno> {
                       dropdwnremolque1InputStatus = Colors.grey;
                     });
                   }
+                  if (tipoRemolque1 == "Porta de 20'" ||
+                      tipoRemolque1 == "Porta de 40'" ||
+                      tipoRemolque1 == "Porta de 53'") {
+                    if (contenedoresController.text == "") {
+                      contenedoresInputStatus = Colors.red;
+                      err++;
+                    } else {
+                      contenedoresInputStatus = Colors.grey;
+                    }
+                  }
                   if (err > 0) {
                     _showAlertDialog(context, "Ingresa todos los campos");
                   } else {
@@ -430,6 +469,16 @@ class formTractoInternoState extends State<formTractoInterno> {
                     setState(() {
                       dropdwnremolque1InputStatus = Colors.grey;
                     });
+                  }
+                  if (tipoRemolque1 == "Porta de 20'" ||
+                      tipoRemolque1 == "Porta de 40'" ||
+                      tipoRemolque1 == "Porta de 53'") {
+                    if (contenedoresController.text == "") {
+                      contenedoresInputStatus = Colors.red;
+                      err++;
+                    } else {
+                      contenedoresInputStatus = Colors.grey;
+                    }
                   }
                   if (err > 0) {
                     _showAlertDialog(context, "Ingresa todos los campos");
