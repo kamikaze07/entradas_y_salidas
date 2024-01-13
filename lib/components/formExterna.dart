@@ -95,7 +95,7 @@ class formExternaState extends State<formExterna> {
       "Remolque1": "No",
       "Remolque2": "No",
       "TipoRemolque1": "No",
-      "TipoRemolque2": "No",
+      "Contenedores": "No",
       "NRefacciones": "No",
       "Observaciones": ObservacionesController.text,
     });

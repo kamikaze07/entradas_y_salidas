@@ -96,7 +96,7 @@ class formUtilitarioForsisState extends State<formUtilitarioForsis> {
       "Remolque1": "No",
       "Remolque2": "No",
       "TipoRemolque1": "Np",
-      "TipoRemolque2": "No",
+      "Contenedores": "No",
       "NRefacciones": "No",
       "Observaciones": ObservacionesController.text,
     });

@@ -8,6 +8,7 @@ import 'package:forsis/theme/theme.dart';
 import 'package:forsis/pages/login_page.dart';
 import 'package:forsis/pages/new_record.dart';
 import 'package:http/http.dart' as http;
+import 'package:forsis/pages/detalleRegistro.dart';
 
 final Search = TextEditingController();
 
@@ -137,6 +138,15 @@ class _BodyState extends State<_Body> {
               itemBuilder: (context, index) {
                 return Card(
                   child: ListTile(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                          return new detalleRegistro(
+                              entradasYSalidas[index]['Id_Entrada']);
+                        }),
+                      );
+                    },
                     contentPadding: EdgeInsets.symmetric(horizontal: 20),
                     leading: Image.asset(entradasYSalidas[index]['Logo'],
                         height: 30),

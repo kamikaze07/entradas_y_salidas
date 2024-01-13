@@ -14,9 +14,9 @@ class formTractoInterno extends StatefulWidget {
 
 const List<String> tipoRemolque = <String>[
   'Selecciona el Tipo de Remolque',
-  "Porta de 20'",
-  "Porta de 40'",
-  "Porta de 53'",
+  'Porta de 20"',
+  'Porta de 40"',
+  'Porta de 53"',
   'Pipa',
   'Gondola',
   'Tolva',
@@ -51,6 +51,7 @@ class formTractoInternoState extends State<formTractoInterno> {
     remolque1Controller.dispose();
     remolque2Controller.dispose();
     observacionesController.dispose();
+    contenedoresController.dispose();
     super.dispose();
   }
 
@@ -101,6 +102,7 @@ class formTractoInternoState extends State<formTractoInterno> {
     var TipoRegistro = TipoRegistro1.toString();
     var TipoUnidad1 = TipoUnidad.toString();
     var TipoUnidadInterna1 = TipoUnidadInterna.toString();
+    var nContenedores = "";
     var full1;
     if (full) {
       full1 = "FULL";
@@ -112,6 +114,11 @@ class formTractoInternoState extends State<formTractoInterno> {
       Remolque2 = "No";
     } else {
       Remolque2 = remolque2Controller.text;
+    }
+    if (contenedoresController.text == "") {
+      nContenedores = "No";
+    } else {
+      nContenedores = contenedoresController.text;
     }
     var list = [
       checkboxRefaccion1,
@@ -141,10 +148,10 @@ class formTractoInternoState extends State<formTractoInterno> {
       "Remolque1": remolque1Controller.text,
       "Remolque2": Remolque2,
       "TipoRemolque1": tipoRemolque1,
+      "Contenedores": nContenedores,
       "NRefacciones": NRefacciones,
       "Observaciones": observacionesController.text,
     });
-    print(response.toString());
     var data = json.decode(response.body);
     if (data.toString() == "Success") {
       _showAlertDialog(context, data.toString());
@@ -255,9 +262,9 @@ class formTractoInternoState extends State<formTractoInterno> {
             onSelected: (String? value) {
               setState(() {
                 tipoRemolque1 = value!;
-                if (value == "Porta de 20'" ||
-                    value == "Porta de 40'" ||
-                    value == "Porta de 53'") {
+                if (value == 'Porta de 20"' ||
+                    value == 'Porta de 40"' ||
+                    value == 'Porta de 53"') {
                   contenedoresVisible = true;
                 } else {
                   contenedoresVisible = false;
@@ -396,9 +403,9 @@ class formTractoInternoState extends State<formTractoInterno> {
                       dropdwnremolque1InputStatus = Colors.grey;
                     });
                   }
-                  if (tipoRemolque1 == "Porta de 20'" ||
-                      tipoRemolque1 == "Porta de 40'" ||
-                      tipoRemolque1 == "Porta de 53'") {
+                  if (tipoRemolque1 == 'Porta de 20"' ||
+                      tipoRemolque1 == 'Porta de 40"' ||
+                      tipoRemolque1 == 'Porta de 53"') {
                     if (contenedoresController.text == "") {
                       contenedoresInputStatus = Colors.red;
                       err++;
@@ -470,9 +477,9 @@ class formTractoInternoState extends State<formTractoInterno> {
                       dropdwnremolque1InputStatus = Colors.grey;
                     });
                   }
-                  if (tipoRemolque1 == "Porta de 20'" ||
-                      tipoRemolque1 == "Porta de 40'" ||
-                      tipoRemolque1 == "Porta de 53'") {
+                  if (tipoRemolque1 == 'Porta de 20"' ||
+                      tipoRemolque1 == 'Porta de 40"' ||
+                      tipoRemolque1 == 'Porta de 53"') {
                     if (contenedoresController.text == "") {
                       contenedoresInputStatus = Colors.red;
                       err++;
