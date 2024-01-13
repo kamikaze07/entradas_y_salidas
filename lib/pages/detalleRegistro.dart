@@ -5,16 +5,16 @@ import 'package:forsis/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
+var entradasYSalidas = [];
+var ID;
+
 class detalleRegistro extends StatelessWidget {
   String Id_Entrada;
   detalleRegistro(this.Id_Entrada, {super.key});
 
-  String get getID {
-    return Id_Entrada;
-  }
-
   @override
   Widget build(BuildContext context) {
+    ID = Id_Entrada;
     final appTheme = Provider.of<ThemeChanger>(context).currentTheme;
     return Scaffold(
       appBar: AppBar(
@@ -33,14 +33,16 @@ class _Body extends StatefulWidget {
 }
 
 class _BodyState extends State<_Body> {
-  var entradasYSalidas = [];
-
-  getEntradasYSalidas() async {
-    var url =
-        Uri.http("192.168.1.209", '/entradasysalidas/getEntradasYSalidas.php', {
+  var iDentrada = ID;
+  var IconTipoRegistro;
+  getEntradaYSalida(String iDEntrada) async {
+    print(iDentrada);
+    var url = Uri.http("192.168.1.209", '/entradasysalidas/getRegistro.php', {
       'q': {'http'}
     });
-    var response = await http.get(url);
+    var response = await http.post(url, body: {
+      "Id_Registro": iDEntrada,
+    });
     if (response.statusCode == 200) {
       setState(() {
         entradasYSalidas = jsonDecode(response.body);
@@ -52,6 +54,17 @@ class _BodyState extends State<_Body> {
           entradasYSalidas[i]['Logo'] = "lib/images/externaLogo.png";
         }
       }
+      if (entradasYSalidas[0]['TipoRegistro'] == "Entrada") {
+        IconTipoRegistro = const Icon(
+          Icons.arrow_downward_outlined,
+          size: 50.0,
+        );
+      } else {
+        IconTipoRegistro = const Icon(
+          Icons.arrow_upward_outlined,
+          size: 50.0,
+        );
+      }
       return entradasYSalidas;
     }
   }
@@ -59,18 +72,98 @@ class _BodyState extends State<_Body> {
   @override
   void initState() {
     super.initState();
-    getEntradasYSalidas();
+    getEntradaYSalida(iDentrada);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
       body: SafeArea(
           child: Center(
-        child: Column(
+        child: ListView(
           children: [
-            const SizedBox(height: 50),
+            Column(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      //logo
+                      Image.asset(
+                        entradasYSalidas[0]['Logo'],
+                        height: 100,
+                      ),
+                      const SizedBox(height: 20),
+                      Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Column(
+                            children: [
+                              Card(
+                                color: Colors.white70,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    ListTile(
+                                      leading: IconTipoRegistro,
+                                      title: const Text('Tipo de Registro'),
+                                      subtitle: Text(
+                                          entradasYSalidas[0]['TipoRegistro']),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Card(
+                                      color: Colors.white70,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            leading: Image.asset(
+                                              entradasYSalidas[0]['Logo'],
+                                              height: 50,
+                                            ),
+                                            title: const Text('Unidad:'),
+                                            subtitle: Text(entradasYSalidas[0]
+                                                ['TipoUnidad']),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Card(
+                                      color: Colors.white70,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            leading: Image.asset(
+                                              entradasYSalidas[0]['Logo'],
+                                              height: 50,
+                                            ),
+                                            title:
+                                                const Text('Tipo de Unidad:'),
+                                            subtitle: Text(entradasYSalidas[0]
+                                                ['TipoUnidad1']),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Divider(),
+                            ],
+                          )),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ],
         ),
       )),
