@@ -19,6 +19,7 @@ dependencies:
   radio_group_v2: ^1.0.2
   flutter_svg: ^2.0.9
   flutter_launcher_icons: ^0.13.1
+  fluttericon: ^2.0.0
 flutter_launcher_icons:
   image_path: "assets/icon/logo.png"
   android: true

@@ -29,6 +29,7 @@ class formTractoInternoState extends State<formTractoInterno> {
   final remolque2Controller = TextEditingController();
   final observacionesController = TextEditingController();
   final contenedoresController = TextEditingController();
+  final operadorController = TextEditingController();
   String tipoRemolque1 = tipoRemolque.first;
   bool full = false;
   bool remolque2 = false;
@@ -44,6 +45,7 @@ class formTractoInternoState extends State<formTractoInterno> {
   var dropdwnremolque1InputStatus = Colors.grey;
   var dropdwnremolque2InputStatus = Colors.grey;
   var contenedoresInputStatus = Colors.grey;
+  var operadorInputStatus = Colors.grey;
 
   @override
   void dispose() {
@@ -52,6 +54,7 @@ class formTractoInternoState extends State<formTractoInterno> {
     remolque2Controller.dispose();
     observacionesController.dispose();
     contenedoresController.dispose();
+    operadorController.dispose();
     super.dispose();
   }
 
@@ -144,7 +147,7 @@ class formTractoInternoState extends State<formTractoInterno> {
       "TipoUnidadInterna": TipoUnidadInterna1,
       "Full": full1,
       "Economico": economicoController.text,
-      "Empleado": "No",
+      "Empleado": operadorController.text,
       "Remolque1": remolque1Controller.text,
       "Remolque2": Remolque2,
       "TipoRemolque1": tipoRemolque1,
@@ -188,21 +191,42 @@ class formTractoInternoState extends State<formTractoInterno> {
         SizedBox(
           width: 250,
           child: TextField(
-              controller: economicoController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "Economico*",
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    economicoController.clear();
-                  },
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: economicoInputStatus),
-                ),
-              )),
+            controller: economicoController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: "Economico*",
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  economicoController.clear();
+                },
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: economicoInputStatus),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          width: 250,
+          child: TextField(
+            controller: operadorController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: "Operador*",
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  operadorController.clear();
+                },
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: operadorInputStatus),
+              ),
+            ),
+          ),
         ),
         const SizedBox(height: 10),
         Row(
@@ -373,6 +397,16 @@ class formTractoInternoState extends State<formTractoInterno> {
                       economicoInputStatus = Colors.grey;
                     });
                   }
+                  if (operadorController.text == "") {
+                    setState(() {
+                      operadorInputStatus = Colors.red;
+                      err++;
+                    });
+                  } else {
+                    setState(() {
+                      operadorInputStatus = Colors.grey;
+                    });
+                  }
                   if (remolque1Controller.text == "") {
                     setState(() {
                       remolque1InputStatus = Colors.red;
@@ -455,6 +489,16 @@ class formTractoInternoState extends State<formTractoInterno> {
                   } else {
                     setState(() {
                       economicoInputStatus = Colors.grey;
+                    });
+                  }
+                  if (operadorController.text == "") {
+                    setState(() {
+                      operadorInputStatus = Colors.red;
+                      err++;
+                    });
+                  } else {
+                    setState(() {
+                      operadorInputStatus = Colors.grey;
                     });
                   }
                   if (remolque1Controller.text == "") {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:forsis/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:fluttericon/font_awesome5_icons.dart';
 
 var entradasYSalidas = [];
 var ID;
@@ -35,6 +36,11 @@ class _Body extends StatefulWidget {
 class _BodyState extends State<_Body> {
   var iDentrada = ID;
   var IconTipoRegistro;
+  var IconTipoUnidad;
+  bool fullSencillo = true;
+  bool tractoInfo = true;
+  bool contenedores = false;
+  bool remolque2Visible = false;
   getEntradaYSalida(String iDEntrada) async {
     print(iDentrada);
     var url = Uri.http("192.168.1.209", '/entradasysalidas/getRegistro.php', {
@@ -64,6 +70,25 @@ class _BodyState extends State<_Body> {
           Icons.arrow_upward_outlined,
           size: 50.0,
         );
+      }
+      if (entradasYSalidas[0]['Full'] == "FULL") {
+        remolque2Visible = true;
+      }
+      if (entradasYSalidas[0]['TipoUnidad1'] == "Tracto") {
+        IconTipoUnidad = const Icon(
+          FontAwesome5.truck,
+          size: 50.0,
+        );
+      } else if (entradasYSalidas[0]['TipoUnidad1'] == "Utilitario") {
+        IconTipoUnidad = const Icon(
+          Icons.directions_car_filled_rounded,
+          size: 50.0,
+        );
+        fullSencillo = false;
+        tractoInfo = false;
+      } else if (entradasYSalidas[0]['TipoUnidad'] == "Externa") {
+        fullSencillo = false;
+        tractoInfo = false;
       }
       return entradasYSalidas;
     }
@@ -95,25 +120,173 @@ class _BodyState extends State<_Body> {
                       ),
                       const SizedBox(height: 20),
                       Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Column(
-                            children: [
-                              Card(
-                                color: Colors.white70,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    ListTile(
-                                      leading: IconTipoRegistro,
-                                      title: const Text('Tipo de Registro'),
-                                      subtitle: Text(
-                                          entradasYSalidas[0]['TipoRegistro']),
-                                    ),
-                                  ],
-                                ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Column(
+                          children: [
+                            Card(
+                              color: Colors.white70,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  ListTile(
+                                    leading: IconTipoRegistro,
+                                    title: const Text('Tipo de Registro'),
+                                    subtitle: Text(
+                                        entradasYSalidas[0]['TipoRegistro']),
+                                  ),
+                                ],
                               ),
-                              Divider(),
-                              Row(
+                            ),
+                            const Divider(
+                              height: 20,
+                              thickness: 3,
+                            ),
+                            Card(
+                              color: Colors.white70,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  ListTile(
+                                    leading: const Icon(
+                                      Icons.account_circle_rounded,
+                                      size: 50.0,
+                                    ),
+                                    title: const Text('Operador'),
+                                    subtitle:
+                                        Text(entradasYSalidas[0]['Empleado']),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Divider(
+                              height: 20,
+                              thickness: 3,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Card(
+                                    color: Colors.white70,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        ListTile(
+                                          leading: Image.asset(
+                                            entradasYSalidas[0]['Logo'],
+                                            height: 50,
+                                          ),
+                                          title: const Text('Unidad:'),
+                                          subtitle: Text(entradasYSalidas[0]
+                                              ['TipoUnidad']),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Card(
+                                    color: Colors.white70,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        ListTile(
+                                          leading: IconTipoUnidad,
+                                          title: const Text('Tipo de Unidad:'),
+                                          subtitle: Text(entradasYSalidas[0]
+                                              ['TipoUnidad1']),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Divider(
+                              height: 20,
+                              thickness: 3,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Card(
+                                    color: Colors.white70,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        ListTile(
+                                          title: const Text('Economico:'),
+                                          subtitle: Text(
+                                              entradasYSalidas[0]['Economico']),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: fullSencillo,
+                                  child: Expanded(
+                                    child: Card(
+                                      color: Colors.white70,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            title: const Text('Unidad en:'),
+                                            subtitle: Text(
+                                                entradasYSalidas[0]['Full']),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Visibility(
+                              visible: tractoInfo,
+                              child: Row(
+                                children: [
+                                  const Divider(
+                                    height: 20,
+                                    thickness: 3,
+                                  ),
+                                  Expanded(
+                                    child: Card(
+                                      color: Colors.white70,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            title: const Text('Remolque 1:'),
+                                            subtitle: Text(entradasYSalidas[0]
+                                                ['Remolque1']),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Card(
+                                      color: Colors.white70,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            title:
+                                                const Text('Tipo de remolque:'),
+                                            subtitle: Text(entradasYSalidas[0]
+                                                ['TipoRemolque']),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Visibility(
+                              visible: remolque2Visible,
+                              child: Row(
                                 children: [
                                   Expanded(
                                     child: Card(
@@ -122,13 +295,9 @@ class _BodyState extends State<_Body> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           ListTile(
-                                            leading: Image.asset(
-                                              entradasYSalidas[0]['Logo'],
-                                              height: 50,
-                                            ),
-                                            title: const Text('Unidad:'),
+                                            title: const Text('Remolque 2:'),
                                             subtitle: Text(entradasYSalidas[0]
-                                                ['TipoUnidad']),
+                                                ['Remolque2']),
                                           ),
                                         ],
                                       ),
@@ -141,14 +310,10 @@ class _BodyState extends State<_Body> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           ListTile(
-                                            leading: Image.asset(
-                                              entradasYSalidas[0]['Logo'],
-                                              height: 50,
-                                            ),
                                             title:
-                                                const Text('Tipo de Unidad:'),
+                                                const Text('Tipo de remolque:'),
                                             subtitle: Text(entradasYSalidas[0]
-                                                ['TipoUnidad1']),
+                                                ['TipoRemolque']),
                                           ),
                                         ],
                                       ),
@@ -156,9 +321,52 @@ class _BodyState extends State<_Body> {
                                   ),
                                 ],
                               ),
-                              Divider(),
-                            ],
-                          )),
+                            ),
+                            Visibility(
+                              visible: tractoInfo,
+                              child: Row(
+                                children: [
+                                  const Divider(
+                                    height: 20,
+                                    thickness: 3,
+                                  ),
+                                  Expanded(
+                                    child: Card(
+                                      color: Colors.white70,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            title: Text(entradasYSalidas[0]
+                                                ['NRefacciones']),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            const Divider(
+                              height: 20,
+                              thickness: 3,
+                            ),
+                            Card(
+                              color: Colors.white70,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  ListTile(
+                                    title: const Text('Observaciones'),
+                                    subtitle: Text(
+                                        entradasYSalidas[0]['Observaciones']),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 )
