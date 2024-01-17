@@ -41,6 +41,7 @@ class _BodyState extends State<_Body> {
   bool tractoInfo = true;
   bool contenedores = false;
   bool remolque2Visible = false;
+  bool contenedoresVisible = false;
   getEntradaYSalida(String iDEntrada) async {
     print(iDentrada);
     var url = Uri.http("192.168.1.209", '/entradasysalidas/getRegistro.php', {
@@ -89,6 +90,11 @@ class _BodyState extends State<_Body> {
       } else if (entradasYSalidas[0]['TipoUnidad'] == "Externa") {
         fullSencillo = false;
         tractoInfo = false;
+      }
+      if (entradasYSalidas[0]['TipoRemolque'] == 'Porta de 20"' ||
+          entradasYSalidas[0]['TipoRemolque'] == 'Porta de 40"' ||
+          entradasYSalidas[0]['TipoRemolque'] == 'Porta de 53"') {
+        contenedoresVisible = true;
       }
       return entradasYSalidas;
     }
@@ -321,6 +327,28 @@ class _BodyState extends State<_Body> {
                                   ),
                                 ],
                               ),
+                            ),
+                            Row(
+                              children: [
+                                Visibility(
+                                  visible: contenedoresVisible,
+                                  child: Expanded(
+                                    child: Card(
+                                      color: Colors.white70,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            title: const Text('Contenedores:'),
+                                            subtitle: Text(entradasYSalidas[0]
+                                                ['Contenedores']),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             Visibility(
                               visible: tractoInfo,
