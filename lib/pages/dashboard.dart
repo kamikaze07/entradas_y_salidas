@@ -1,14 +1,13 @@
 import 'dart:convert';
 
 import 'package:anim_search_bar/anim_search_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:forsis/theme/theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:forsis/pages/detalleRegistro.dart';
 
-final Search = TextEditingController();
+final search = TextEditingController();
 
 class LauncherPage extends StatelessWidget {
   const LauncherPage({super.key});
@@ -63,13 +62,13 @@ class _BodyState extends State<_Body> {
     getEntradasYSalidas();
   }
 
-  _searchEntradasYSalidas(String Search) async {
+  _searchEntradasYSalidas(String search) async {
     var url = Uri.http(
         "192.168.1.209", '/entradasysalidas/searchEntradasYSalidas.php', {
       'q': {'http'}
     });
     var response = await http.post(url, body: {
-      "search": Search,
+      "search": search,
     });
     if (response.statusCode == 200) {
       setState(() {
@@ -106,13 +105,12 @@ class _BodyState extends State<_Body> {
     }
   }
 
-  String searchEntradasYSalidas(String Search) {
+  String searchEntradasYSalidas(String search) {
     setState(() {
       entradasYSalidas.clear();
-      _searchEntradasYSalidas(Search);
-      print(entradasYSalidas);
+      _searchEntradasYSalidas(search);
     });
-    return Search;
+    return search;
   }
 
   @override
@@ -120,10 +118,10 @@ class _BodyState extends State<_Body> {
     return Scaffold(
         floatingActionButton: AnimSearchBar(
             width: 400,
-            textController: Search,
+            textController: search,
             onSuffixTap: () {
               setState(() {
-                Search.clear();
+                search.clear();
               });
             },
             helpText: "Buscar...",
@@ -140,12 +138,12 @@ class _BodyState extends State<_Body> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (BuildContext context) {
-                          return new detalleRegistro(
+                          return detalleRegistro(
                               entradasYSalidas[index]['Id_Entrada']);
                         }),
                       );
                     },
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                     leading: Image.asset(entradasYSalidas[index]['Logo'],
                         height: 30),
                     title: Text(entradasYSalidas[index]['TipoRegistro'] +

@@ -43,7 +43,6 @@ class _BodyState extends State<_Body> {
   bool remolque2Visible = false;
   bool contenedoresVisible = false;
   getEntradaYSalida(String iDEntrada) async {
-    print(iDentrada);
     var url = Uri.http("192.168.1.209", '/entradasysalidas/getRegistro.php', {
       'q': {'http'}
     });
