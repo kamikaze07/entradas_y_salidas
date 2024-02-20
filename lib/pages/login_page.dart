@@ -67,11 +67,8 @@ class LoginPage extends StatelessWidget {
         "password": passwordController.text,
       });
       var data = json.decode(response.body);
-      if (data.toString() == "Success") {
-        _showAlertDialog(context, data.toString());
-      } else {
-        _showAlertDialog(context, data.toString());
-      }
+      // ignore: use_build_context_synchronously
+      _showAlertDialog(context, data.toString());
     }
     //text editing controllers
 

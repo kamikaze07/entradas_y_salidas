@@ -22,10 +22,10 @@ class SlideshowPage extends StatelessWidget {
 
     return Scaffold(
         body: (isLarge)
-            ? Column(
+            ? const Column(
                 children: children,
               )
-            : Row(
+            : const Row(
                 children: children,
               ));
   }
