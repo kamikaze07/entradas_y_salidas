@@ -138,7 +138,7 @@ class formTractoInternoState extends State<formTractoInterno> {
       }
     }
     var url = Uri.http(
-        "192.168.1.209", '/entradasysalidas/nEntradaSalidaForsis.php', {
+        "forsis.ddns.net", '/entradasysalidas/nEntradaSalidaForsis.php', {
       'q': {'http'}
     });
     var response = await http.post(url, body: {

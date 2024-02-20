@@ -36,8 +36,8 @@ class _BodyState extends State<_Body> {
   var entradasYSalidas = [];
 
   getEntradasYSalidas() async {
-    var url =
-        Uri.http("192.168.1.209", '/entradasysalidas/getEntradasYSalidas.php', {
+    var url = Uri.http(
+        "forsis.ddns.net", '/entradasysalidas/getEntradasYSalidas.php', {
       'q': {'http'}
     });
     var response = await http.get(url);
@@ -64,7 +64,7 @@ class _BodyState extends State<_Body> {
 
   _searchEntradasYSalidas(String search) async {
     var url = Uri.http(
-        "192.168.1.209", '/entradasysalidas/searchEntradasYSalidas.php', {
+        "forsis.ddns.net", '/entradasysalidas/searchEntradasYSalidas.php', {
       'q': {'http'}
     });
     var response = await http.post(url, body: {
@@ -86,8 +86,8 @@ class _BodyState extends State<_Body> {
   }
 
   Future refresh() async {
-    var url =
-        Uri.http("192.168.1.209", '/entradasysalidas/getEntradasYSalidas.php', {
+    var url = Uri.http(
+        "forsis.ddns.net", '/entradasysalidas/getEntradasYSalidas.php', {
       'q': {'http'}
     });
     var response = await http.get(url);

@@ -83,7 +83,7 @@ class formUtilitarioForsisState extends State<formUtilitarioForsis> {
     var TipoUnidad1 = TipoUnidad.toString();
     var TipoUnidadInterna1 = TipoUnidadInterna.toString();
     var url = Uri.http(
-        "192.168.1.209", '/entradasysalidas/nEntradaSalidaForsis.php', {
+        "forsis.ddns.net", '/entradasysalidas/nEntradaSalidaForsis.php', {
       'q': {'http'}
     });
     var response = await http.post(url, body: {
