@@ -31,7 +31,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: LoginPage(),
       routes: <String, WidgetBuilder>{
-        '/dashboard': (BuildContext context) => const LauncherPage(),
+        '/dashboard': (BuildContext context) => LauncherPage(""),
         '/new_record': (BuildContext context) => const NewRecord(),
         '/Login': (BuildContext context) => LoginPage(),
       },

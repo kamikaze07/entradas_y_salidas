@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,11 +8,15 @@ import 'package:forsis/pages/detalleRegistro.dart';
 
 final search = TextEditingController();
 
+var Usuario;
+
 class LauncherPage extends StatelessWidget {
-  const LauncherPage({super.key});
+  String User;
+  LauncherPage(this.User, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    Usuario = User;
     final appTheme = Provider.of<ThemeChanger>(context).currentTheme;
     return Scaffold(
       appBar: AppBar(
@@ -173,6 +176,7 @@ class _MenuPrincipal extends StatelessWidget {
               height: 100,
             ),
           ),
+          Text("Bienvenido: " + Usuario),
           ListTile(
               leading: Icon(
                 Icons.add,

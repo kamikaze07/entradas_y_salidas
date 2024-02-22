@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:forsis/theme/theme.dart';
 import 'package:provider/provider.dart';
@@ -76,7 +75,7 @@ class _BodyState extends State<_Body> {
       }
       if (entradasYSalidas[0]['TipoUnidad1'] == "Tracto") {
         IconTipoUnidad = const Icon(
-          FontAwesome5.truck,
+          FontAwesome5.truck_moving,
           size: 50.0,
         );
       } else if (entradasYSalidas[0]['TipoUnidad1'] == "Utilitario") {

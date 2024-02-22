@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:forsis/components/my_textfield.dart';
@@ -26,9 +25,11 @@ class LoginPage extends StatelessWidget {
               isDefaultAction: true,
               onPressed: () {
                 Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LauncherPage()));
+                  context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return LauncherPage(usernameController.text);
+                  }),
+                );
               },
               child: const Text('Ok'),
             ),
